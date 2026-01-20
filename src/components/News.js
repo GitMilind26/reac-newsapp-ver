@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+ import React, { useEffect, useState } from 'react'
 import Newsitem from './Newsitem'
 import Spinner from './Spinner'
 import PropTypes from 'prop-types'
@@ -8,9 +8,10 @@ const News = (props) => {
   const [articles, setArticles] = useState([])
   const [page, setPage] = useState(1)
   const [totalResults, setTotalResults] = useState(0)
-  const [loading, setLoading] = useState(true);
-  
+  const [loading, setLoading] = useState(true)
+
   const fetchNews = async (pageNo) => {
+    setLoading(true)
     props.setProgress(10)
 
     const url = `https://newsapi.org/v2/top-headlines?country=us&category=${props.category}&apiKey=${props.apikey}&page=${pageNo}&pageSize=${props.pageSize}`
@@ -22,6 +23,7 @@ const News = (props) => {
 
       if (parsedData.status !== "ok") {
         console.error(parsedData)
+        setLoading(false)
         props.setProgress(100)
         return
       }
@@ -30,14 +32,15 @@ const News = (props) => {
       setTotalResults(parsedData.totalResults)
       setPage(pageNo + 1)
 
+      setLoading(false)
       props.setProgress(100)
     } catch (error) {
       console.error(error)
+      setLoading(false)
       props.setProgress(100)
     }
   }
 
-  // Same as componentDidMount + componentDidUpdate
   useEffect(() => {
     document.title = `NewsHub - ${props.category.toUpperCase()}`
     setArticles([])
@@ -52,7 +55,9 @@ const News = (props) => {
       <h2 className="text-center news-flow">
         NewsHub - Top {props.category.toUpperCase()} Headlines
       </h2>
-        {loading && articles.length === 0 && <Spinner />}
+
+      {loading && articles.length === 0 && <Spinner />}
+
       <InfiniteScroll
         dataLength={articles.length}
         next={() => fetchNews(page)}
