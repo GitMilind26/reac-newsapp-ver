@@ -16,8 +16,8 @@ const News = (props) => {
 
     // const url = `https://newsapi.org/v2/top-headlines?country=us&category=${props.category}&apiKey=${props.apikey}&page=${pageNo}&pageSize=${props.pageSize}`
   // const url = `https://your-backend-url.vercel.app/news?category=${props.category}&page=${page}&pageSize=${props.pageSize}`
-  const url = `${process.env.REACT_APP_BACKEND_URL}/news?category=${props.category}&page=${pageNo}&pageSize=${props.pageSize}`
-
+  // const url = `${process.env.REACT_APP_BACKEND_URL}/news?category=${props.category}&page=${pageNo}&pageSize=${props.pageSize}`
+const url = "https://your-backend-deployed-name.vercel.app/news?category=general&page=1&pageSize=9";
     props.setProgress(30)
     try {
       const response = await fetch(url)
